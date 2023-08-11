@@ -69,6 +69,7 @@ public struct AnimateText<E: ATTextAnimateEffect>: View {
         ZStack(alignment: .leading) {
             if !isChanged {
                 Text(text)
+                    .adjustFontToFitWidth()
                     .lineLimit(1)
                     .takeSize($size)
             }else {
@@ -81,9 +82,13 @@ public struct AnimateText<E: ATTextAnimateEffect>: View {
                                                  value: value,
                                                  size: size)
                         if toggle {
-                            Text(element).modifier(E(data, userInfo))
+                            Text(element)
+                                .adjustFontToFitWidth()
+                                .modifier(E(data, userInfo))
                         }else {
-                            Text(element).modifier(E(data, userInfo))
+                            Text(element)
+                                .adjustFontToFitWidth()
+                                .modifier(E(data, userInfo))
                         }
                     }
                 }
@@ -122,5 +127,13 @@ public struct AnimateText<E: ATTextAnimateEffect>: View {
 struct AnimateText_Previews: PreviewProvider {
     static var previews: some View {
         ATAnimateTextPreview<ATRandomTypoEffect>()
+    }
+}
+
+extension Text {
+    func adjustFontToFitWidth(minFactor: CGFloat = 0.6) -> some View {
+        self
+            .allowsTightening(true)
+            .minimumScaleFactor(minFactor)
     }
 }
